@@ -3,10 +3,14 @@ package com.gpg.swarna.kalakar.entity;
 import java.util.Date;
 import java.util.List;
 
+import jakarta.persistence.CollectionTable;
+import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
@@ -21,9 +25,6 @@ public class Customer {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer customerId;
-
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Integer billNumber;
 	
 	private String customerName;
 
@@ -39,7 +40,12 @@ public class Customer {
 
 	private Double rateOfInterest;
 
+	@ElementCollection
+	@CollectionTable(name = "customer_items", joinColumns = @JoinColumn(name = "customer_id"))
+	@Column(name = "customer_value")
 	private List<String> itemDetails;
+	
+	private Integer duration;
 
 	@PrePersist
 	protected void onCreate() {
@@ -47,5 +53,4 @@ public class Customer {
 			dateOfIssue = new Date(); // Set the default value to the current date and time
 		}
 	}
-
 }
